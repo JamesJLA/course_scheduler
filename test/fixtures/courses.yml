@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: "Introduction to Computer Science"
+  code: "CS101"
+  credits: 3
+  semester: "Fall 2024"
+  description: "Basic computer science concepts and programming fundamentals"
+
+two:
+  name: "Data Structures"
+  code: "CS201"
+  credits: 4
+  semester: "Spring 2025"
+  description: "Advanced data structures and algorithms"

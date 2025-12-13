@@ -1,0 +1,207 @@
+<div class="container">
+  <header>
+    <h1>Course Scheduler</h1>
+    <div class="user-info">
+      <%= current_user.email %>
+      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn-secondary" %>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <section class="my-enrollments">
+      <h2>My Enrolled Courses</h2>
+      <% if @enrollments.any? %>
+        <div class="enrollments-list">
+          <% @enrollments.each do |enrollment| %>
+            <div class="enrollment-card" data-enrollment-id="<%= enrollment.id %>">
+              <div class="course-info">
+                <h3><%= enrollment.course.name %></h3>
+                <p class="course-code"><%= enrollment.course.code %></p>
+                <p class="course-details">
+                  <%= enrollment.course.credits %> credits | <%= enrollment.course.semester %>
+                </p>
+                <% if enrollment.course.description.present? %>
+                  <p class="course-description"><%= enrollment.course.description %></p>
+                <% end %>
+                <p class="enrollment-status">Status: <%= enrollment.status %></p>
+              </div>
+              <%= button_to "Drop Course", enrollment_path(enrollment), method: :delete, class: "btn-danger", data: { turbo_confirm: "Are you sure you want to drop this course?" } %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="empty-state">You are not enrolled in any courses yet.</p>
+      <% end %>
+    </section>
+
+    <section class="available-courses">
+      <h2>Available Courses</h2>
+      <div class="courses-list">
+        <% @courses.each do |course| %>
+          <% enrolled = @enrollments.any? { |e| e.course_id == course.id } %>
+          <div class="course-card <%= 'enrolled' if enrolled %>">
+            <div class="course-info">
+              <h3><%= course.name %></h3>
+              <p class="course-code"><%= course.code %></p>
+              <p class="course-details">
+                <%= course.credits %> credits | <%= course.semester %>
+              </p>
+              <% if course.description.present? %>
+                <p class="course-description"><%= course.description %></p>
+              <% end %>
+            </div>
+            <% unless enrolled %>
+              <%= button_to "Enroll", enrollments_path, method: :post, params: { enrollment: { course_id: course.id } }, class: "btn-primary" %>
+            <% else %>
+              <span class="enrolled-badge">Enrolled</span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  h1 {
+    margin: 0;
+    color: #333;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .dashboard-content {
+    display: grid;
+    gap: 40px;
+  }
+
+  section h2 {
+    margin-bottom: 20px;
+    color: #555;
+  }
+
+  .enrollments-list, .courses-list {
+    display: grid;
+    gap: 20px;
+  }
+
+  .enrollment-card, .course-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.2s;
+  }
+
+  .enrollment-card:hover, .course-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .course-card.enrolled {
+    background: #f5f5f5;
+  }
+
+  .course-info h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+  }
+
+  .course-code {
+    font-weight: bold;
+    color: #666;
+    margin: 0 0 8px 0;
+  }
+
+  .course-details {
+    color: #888;
+    margin: 0 0 8px 0;
+  }
+
+  .course-description {
+    color: #666;
+    margin: 8px 0 0 0;
+    font-size: 0.9em;
+  }
+
+  .enrollment-status {
+    margin: 8px 0 0 0;
+    font-size: 0.9em;
+    color: #666;
+    text-transform: capitalize;
+  }
+
+  .empty-state {
+    color: #999;
+    font-style: italic;
+    padding: 40px;
+    text-align: center;
+    background: #f9f9f9;
+    border-radius: 8px;
+  }
+
+  .enrolled-badge {
+    background: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+
+  .btn-primary, .btn-secondary, .btn-danger {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+
+  .btn-primary {
+    background: #2196F3;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #1976D2;
+  }
+
+  .btn-secondary {
+    background: #757575;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: #616161;
+  }
+
+  .btn-danger {
+    background: #f44336;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background: #d32f2f;
+  }
+</style>
