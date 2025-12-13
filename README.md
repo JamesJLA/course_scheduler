@@ -1,24 +1,56 @@
-# README
+Course Scheduler
+A simple web application for students to manage their course schedule. Built with Ruby on Rails and MySQL.
+Features
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+User authentication (sign up, login, logout)
+Add courses to your schedule
+Remove courses from your schedule
+Persistent storage in MySQL database
+Real-time updates without page refreshes
 
-Things you may want to cover:
+Requirements
 
-* Ruby version
+Ruby 3.x
+Rails 8.x
+MySQL
+Arch Linux
 
-* System dependencies
+Setup
+Install Dependencies
+bashsudo pacman -S mysql ruby base-devel git
+gem install bundler rails
+Setup MySQL
+bashsudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+sudo systemctl start mysqld
+sudo systemctl enable mysqld
+sudo mysql -u root -p
+In MySQL:
+sqlCREATE USER 'rails'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'rails'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+Install Application
+bashcd course_scheduler
+bundle install
+rails db:create
+rails db:migrate
+rails db:seed
+Run
+bashrails server
+Visit http://localhost:3000
+Database Configuration
 
-* Configuration
+Database: course_scheduler_development
+Username: rails
+Password: password
+Host: localhost
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Edit config/database.yml to change these settings.
+Troubleshooting
+Reset database:
+bashrails db:drop
+rails db:create
+rails db:migrate
+rails db:seed
+Check MySQL status:
+bashsudo systemctl status mysqld
