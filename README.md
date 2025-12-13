@@ -19,22 +19,26 @@ Setup
 Install Dependencies
 bashsudo pacman -S mysql ruby base-devel git
 gem install bundler rails
+
 Setup MySQL
 bashsudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 sudo systemctl start mysqld
 sudo systemctl enable mysqld
 sudo mysql -u root -p
+
 In MySQL:
 sqlCREATE USER 'rails'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON *.* TO 'rails'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
+
 Install Application
 bashcd course_scheduler
 bundle install
 rails db:create
 rails db:migrate
 rails db:seed
+
 Run
 bashrails server
 Visit http://localhost:3000
@@ -47,6 +51,7 @@ Host: localhost
 
 Edit config/database.yml to change these settings.
 Troubleshooting
+
 Reset database:
 bashrails db:drop
 rails db:create
