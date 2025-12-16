@@ -114,19 +114,45 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('Dashboard loaded, setting up custom course form...');
+  
   const toggleButton = document.getElementById('toggle-custom-course-form');
   const cancelButton = document.getElementById('cancel-custom-course');
   const form = document.getElementById('custom-course-form');
   
-  toggleButton.addEventListener('click', function() {
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    toggleButton.textContent = form.style.display === 'none' ? 'Add Custom Course' : 'Hide Form';
-  });
+  console.log('Elements found:');
+  console.log('toggleButton:', toggleButton);
+  console.log('cancelButton:', cancelButton);
+  console.log('form:', form);
   
-  cancelButton.addEventListener('click', function() {
-    form.style.display = 'none';
-    toggleButton.textContent = 'Add Custom Course';
-  });
+  if (toggleButton && cancelButton && form) {
+    console.log('All elements found, adding listeners...');
+    
+    toggleButton.addEventListener('click', function() {
+      console.log('Toggle button clicked, current display:', form.style.display);
+      if (form.style.display === 'none') {
+        form.style.display = 'block';
+        toggleButton.textContent = 'Hide Form';
+      } else {
+        form.style.display = 'none';
+        toggleButton.textContent = 'Add Custom Course';
+      }
+      console.log('New display:', form.style.display);
+    });
+    
+    cancelButton.addEventListener('click', function() {
+      console.log('Cancel button clicked');
+      form.style.display = 'none';
+      toggleButton.textContent = 'Add Custom Course';
+    });
+    
+    console.log('Event listeners added successfully');
+  } else {
+    console.error('Missing elements for custom course form');
+    if (!toggleButton) console.error('Toggle button not found');
+    if (!cancelButton) console.error('Cancel button not found');
+    if (!form) console.error('Form not found');
+  }
   
   // Handle custom course form submission with AJAX
   const customFormElement = document.getElementById('custom-course-enroll-form');
@@ -173,8 +199,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const form = this.closest('form');
       const formData = new FormData(form);
-      const originalText = this.value;
-      this.value = 'Enrolling...';
+      const originalText = this.innerHTML;
+      this.innerHTML = 'Enrolling...';
       this.disabled = true;
       
       fetch(form.action, {
@@ -191,14 +217,14 @@ document.addEventListener('DOMContentLoaded', function() {
           location.reload();
         } else {
           alert('Error: ' + data.errors.join(', '));
-          this.value = originalText;
+          this.innerHTML = originalText;
           this.disabled = false;
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('An error occurred while enrolling');
-        this.value = originalText;
+        alert('An error occurred while dropping course');
+        this.innerHTML = originalText;
         this.disabled = false;
       });
     });
@@ -216,8 +242,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const form = this.closest('form');
       const formData = new FormData(form);
-      const originalText = this.value;
-      this.value = 'Dropping...';
+      const originalText = this.innerHTML;
+      this.innerHTML = 'Dropping...';
       this.disabled = true;
       
       fetch(form.action, {
@@ -234,14 +260,14 @@ document.addEventListener('DOMContentLoaded', function() {
           location.reload();
         } else {
           alert('Error: ' + data.errors.join(', '));
-          this.value = originalText;
+          this.innerHTML = originalText;
           this.disabled = false;
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('An error occurred while dropping course');
-        this.value = originalText;
+        alert('An error occurred while enrolling in course');
+        this.innerHTML = originalText;
         this.disabled = false;
       });
     });
