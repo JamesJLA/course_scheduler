@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-12">
+    <h1 class="mb-4">Search Users</h1>
+    
+    <div class="card bg-dark text-light border-secondary mb-4">
+      <div class="card-body">
+        <%= form_with url: users_path, method: :get, local: true, class: "row g-3" do |form| %>
+          <div class="col-md-8">
+            <%= form.label :search, "Search by email:", class: "form-label text-light" %>
+            <%= form.text_field :search, value: params[:search], class: "form-control bg-secondary text-light border-secondary", placeholder: "Enter email address" %>
+          </div>
+          <div class="col-md-4">
+            <%= form.label :commit, " ", class: "form-label text-light" %>
+            <%= form.submit "Search", class: "btn btn-success w-100" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <% if @users.any? %>
+      <h2 class="mb-3">Results</h2>
+      <div class="row">
+        <% @users.each do |user| %>
+          <div class="col-md-6 mb-3">
+            <div class="card bg-dark text-light border-secondary">
+              <div class="card-body">
+                <h5 class="card-title"><%= user.email %></h5>
+                <%= link_to "View Profile", user_path(user), class: "btn btn-outline-light btn-sm" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% elsif params[:search].present? %>
+      <div class="alert alert-warning">
+        No users found matching "<%= params[:search] %>"
+      </div>
+    <% end %>
+  </div>
+</div>

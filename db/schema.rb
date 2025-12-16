@@ -10,16 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_13_065358) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_16_195525) do
   create_table "courses", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "code"
     t.datetime "created_at", null: false
     t.integer "credits"
+    t.boolean "custom", default: false, null: false
     t.text "description"
     t.string "name"
     t.string "semester"
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_courses_on_code", unique: true
+    t.index ["custom"], name: "index_courses_on_custom"
     t.index ["semester"], name: "index_courses_on_semester"
   end
 

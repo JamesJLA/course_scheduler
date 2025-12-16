@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   root "dashboard#index"
 
+  get "/dashboard", to: "dashboard#index"
+
   resources :courses
+  resources :users, only: [ :index, :show ]
   resources :enrollments, only: [ :create, :destroy ]
 end

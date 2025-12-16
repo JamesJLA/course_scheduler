@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Custom Course Button</title>
+</head>
+<body>
+    <button id="toggle-custom-course-form">Add Custom Course</button>
+    <div id="custom-course-form" style="display: none;">
+        <h3>Custom Course Form</h3>
+        <p>This is the form that should appear/disappear.</p>
+        <button id="cancel-custom-course">Cancel</button>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggleButton = document.getElementById('toggle-custom-course-form');
+      const cancelButton = document.getElementById('cancel-custom-course');
+      const form = document.getElementById('custom-course-form');
+      
+      console.log('Elements found:');
+      console.log('Toggle button:', toggleButton);
+      console.log('Cancel button:', cancelButton);
+      console.log('Form:', form);
+      console.log('Initial form display:', form ? form.style.display : 'form not found');
+      
+      if (toggleButton) {
+        toggleButton.addEventListener('click', function() {
+          console.log('Toggle button clicked!');
+          console.log('Current display:', form.style.display);
+          form.style.display = form.style.display === 'none' ? 'block' : 'none';
+          toggleButton.textContent = form.style.display === 'none' ? 'Add Custom Course' : 'Hide Form';
+          console.log('New display:', form.style.display);
+        });
+      }
+      
+      if (cancelButton) {
+        cancelButton.addEventListener('click', function() {
+          console.log('Cancel button clicked!');
+          form.style.display = 'none';
+          toggleButton.textContent = 'Add Custom Course';
+        });
+      }
+    });
+    </script>
+</body>
+</html>

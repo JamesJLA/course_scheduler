@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-12">
+    <h1 class="mb-4"><%= @course.name %></h1>
+    
+    <div class="card bg-dark text-light border-secondary mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8">
+            <h5 class="card-title"><%= @course.code %></h5>
+            <p class="card-text">
+              <strong>Credits:</strong> <%= @course.credits %><br>
+              <strong>Semester:</strong> <%= @course.semester %>
+            </p>
+            <% if @course.description.present? %>
+              <p class="card-text"><strong>Description:</strong><br><%= @course.description %></p>
+            <% end %>
+            <% if @course.custom? %>
+              <span class="badge bg-warning text-dark">Custom Course</span>
+            <% else %>
+              <span class="badge bg-info">Official Course</span>
+            <% end %>
+          </div>
+          <div class="col-md-4 text-end">
+            <div class="d-flex flex-column gap-2">
+              <% if user_signed_in? %>
+                <% enrolled = current_user.enrollments.exists?(course_id: @course.id) %>
+                <% if enrolled %>
+                  <span class="badge bg-success">You are enrolled</span>
+                  <%= link_to "Drop Course", enrollment_path(current_user.enrollments.find_by(course_id: @course.id)), 
+                      method: :delete, 
+                      class: "btn btn-danger btn-sm",
+                      data: { turbo_confirm: "Are you sure you want to drop this course?" } %>
+                <% else %>
+                  <%= link_to "Enroll Now", enrollments_path(enrollment: { course_id: @course.id }), 
+                      method: :post, 
+                      class: "btn btn-success btn-sm" %>
+                <% end %>
+              <% end %>
+              <%= link_to "Back to Courses", courses_path, class: "btn btn-outline-light btn-sm" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <% if @course.enrollments.any? %>
+      <div class="card bg-dark text-light border-secondary">
+        <div class="card-body">
+          <h5 class="card-title">Enrolled Students (<%= @course.enrollments.count %>)</h5>
+          <div class="table-responsive">
+            <table class="table table-dark table-hover">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Status</th>
+                  <th>Enrolled</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @course.enrollments.includes(:user).each do |enrollment| %>
+                  <tr>
+                    <td><%= enrollment.user.email %></td>
+                    <td><span class="badge bg-info"><%= enrollment.status %></span></td>
+                    <td><%= enrollment.created_at.strftime("%b %d, %Y") %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

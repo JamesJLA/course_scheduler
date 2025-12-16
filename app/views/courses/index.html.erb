@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-12">
+    <h1 class="mb-4">All Courses</h1>
+    
+    <div class="row">
+      <% @courses.each do |course| %>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card bg-dark text-light border-secondary h-100">
+            <div class="card-body">
+              <h5 class="card-title"><%= course.name %></h5>
+              <p class="card-text">
+                <small class="text-muted"><%= course.code %></small><br>
+                <%= course.credits %> credits | <%= course.semester %>
+              </p>
+              <% if course.description.present? %>
+                <p class="card-text small"><%= course.description %></p>
+              <% end %>
+              <% if course.custom? %>
+                <span class="badge bg-warning text-dark">Custom</span>
+              <% else %>
+                <span class="badge bg-info">Official</span>
+              <% end %>
+            </div>
+            <div class="card-footer bg-secondary border-secondary">
+              <%= link_to "View Details", course_path(course), class: "btn btn-outline-light btn-sm" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <% if @courses.empty? %>
+      <div class="alert alert-info">
+        No courses available yet. Create some custom courses from the dashboard!
+      </div>
+    <% end %>
+  </div>
+</div>
