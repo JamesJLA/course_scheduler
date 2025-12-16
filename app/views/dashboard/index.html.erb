@@ -154,11 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          location.reload();
+          Turbo.visit(window.location.href, { action: 'replace' });
         } else {
           alert('Error: ' + data.errors.join(', '));
-          submitButton.value = originalText;
-          submitButton.disabled = false;
+          this.innerHTML = originalText;
+          this.disabled = false;
         }
       })
       .catch(error => {
