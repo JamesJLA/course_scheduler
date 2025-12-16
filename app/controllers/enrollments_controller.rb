@@ -2,9 +2,13 @@ class EnrollmentsController < ApplicationController
   before_action :authenticate_user!
 
   def create
+    Rails.logger.info "Enrollment params: #{params.inspect}"
+
     if custom_course_params?
+      Rails.logger.info "Creating custom course..."
       course = create_custom_course
       if course.invalid?
+        Rails.logger.error "Course validation errors: #{course.errors.full_messages}"
         render json: { success: false, errors: course.errors.full_messages }, status: :unprocessable_entity
         return
       end
@@ -25,6 +29,7 @@ class EnrollmentsController < ApplicationController
         }
       }
     else
+      Rails.logger.error "Enrollment validation errors: #{@enrollment.errors.full_messages}"
       render json: { success: false, errors: @enrollment.errors.full_messages }, status: :unprocessable_entity
     end
   end
@@ -39,20 +44,21 @@ class EnrollmentsController < ApplicationController
   private
 
   def enrollment_params
-    params.require(:enrollment).permit(:course_id)
+    params.require(:enrollment).permit(:course_id, custom_course: [ :name, :code, :credits, :semester, :description ])
   end
 
   def custom_course_params?
-    params[:enrollment][:custom_course].present?
+    params.dig(:enrollment, :custom_course).present?
   end
 
   def create_custom_course
+    custom_params = params.dig(:enrollment, :custom_course)
     Course.create!(
-      name: params[:enrollment][:custom_course][:name],
-      code: params[:enrollment][:custom_course][:code],
-      credits: params[:enrollment][:custom_course][:credits],
-      semester: params[:enrollment][:custom_course][:semester],
-      description: params[:enrollment][:custom_course][:description],
+      name: custom_params[:name],
+      code: custom_params[:code],
+      credits: custom_params[:credits],
+      semester: custom_params[:semester],
+      description: custom_params[:description],
       custom: true
     )
   rescue ActiveRecord::RecordInvalid => e
