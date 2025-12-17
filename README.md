@@ -1,12 +1,13 @@
 # Course Scheduler
 
-A simple web application for students to manage their course schedule. Built with Ruby on Rails and MySQL.
+A simple web application for students to manage their course schedule and view their friend's schedule. Built with Ruby on Rails and MySQL.
 
 ## Features
 
 * User authentication (sign up, login, logout)
 * Add courses to your schedule
 * Remove courses from your schedule
+* View others profiles
 * Persistent storage in MySQL database
 * Real-time updates without page refreshes
 
