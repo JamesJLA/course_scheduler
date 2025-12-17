@@ -7,7 +7,7 @@ A simple web application for students to manage their course schedule and view t
 * User authentication (sign up, login, logout)
 * Add courses to your schedule
 * Remove courses from your schedule
-* View others profiles
+* View others schedules
 * Persistent storage in MySQL database
 * Real-time updates without page refreshes
 
